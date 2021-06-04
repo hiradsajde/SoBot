@@ -1,0 +1,4 @@
+array (
+  'chat_id' => 1022208793,
+  'text' => 'salam',
+)

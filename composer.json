@@ -1,0 +1,20 @@
+{
+    "name": "hiradsajde/sobot",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hiradsajde",
+            "email": "hirads.realy@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.3",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "sobot\\" : "sobot/"
+        }
+    }
+}
