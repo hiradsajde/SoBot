@@ -16,5 +16,6 @@
         "psr-4": {
             "sobot\\" : "sobot/"
         }
-    }
+    },
+    "minimum-stability" : "stable"
 }

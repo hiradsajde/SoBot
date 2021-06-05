@@ -50,7 +50,7 @@ class bot
     }
     public function getUpdate()
     {
-        $update = json_decode(file_get_contents("php://input"));
+        $update = json_decode(file_get_contents("php://input")) ?? exit();
         $this->update = $update;
         if (isset($update->message)) {
             $this->message_id = $update->message->message_id;
@@ -108,6 +108,7 @@ class bot
     public function getDefault($name)
     {
         return [
+            'setWebhook' => 'url',
             'sendMessage' => 'text',
             'editMessageText' => 'text',
             'sendPhoto' => 'photo',
