@@ -17,5 +17,5 @@
             "sobot\\" : "sobot/"
         }
     },
-    "minimum-stability" : "dev"
+    "minimum-stability" : "stable"
 }
