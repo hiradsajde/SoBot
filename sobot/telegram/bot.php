@@ -4,7 +4,7 @@ namespace sobot\telegram;
 
 use GuzzleHttp;
 use sobot\core\arrayManager as array_manager;
-
+use sobot\core\ipManager as ip_manager;
 class bot
 {
     private $token;
@@ -14,6 +14,7 @@ class bot
     {
         $this->token = $token;
         $this->array_manager = new array_manager();
+        $this->ip_manager = new ip_manager();
     }
     public function __call($name, $arguments)
     {
@@ -50,7 +51,10 @@ class bot
     }
     public function getUpdate()
     {
-        $update = json_decode(file_get_contents("php://input")) ?? exit();
+        $update = json_decode(file_get_contents("php://input")) ?? $return = true;
+        if($return){
+            return false;
+        }
         $this->update = $update;
         if (isset($update->message)) {
             $this->message_id = $update->message->message_id;
@@ -174,5 +178,24 @@ class bot
     public function keyboard($keyboard)
     {
         return json_encode(['keyboard' => $keyboard]);
+    }
+    public function isUpdate(){
+        $ranges = [
+             $this->ip_manager->rangeToIp('149.154.164.0/22'),
+             $this->ip_manager->rangeToIp('149.154.160.0/20'),
+             $this->ip_manager->rangeToIp('91.108.4.0/22'),
+             $this->ip_manager->rangeToIp('91.108.56.0/22'),
+        ];
+        $user_range = ip2long($_SERVER['REMOTE_ADDR']);
+        foreach($ranges as $range){
+            $status = [
+                'lower' => ip2long($range['lower']),
+                'higher' => ip2long($range['higher']),
+            ];
+            if($status['lower'] < $user_range && $status['higher'] > $user_range){
+                return true;
+            }
+        }
+        return false;
     }
 }
