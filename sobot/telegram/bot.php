@@ -177,7 +177,7 @@ class bot
     }
     public function keyboard($keyboard)
     {
-        return json_encode(['keyboard' => $keyboard]);
+        return json_encode(['keyboard' => $keyboard,'resize_keyboard' => true]);
     }
     public function isUpdate(){
         $ranges = [
