@@ -167,7 +167,7 @@ class bot
 
             ],
             'sendMessage' => [
-                'chat_id' => $this->from_id,
+                'chat_id' => $this->chat_id,
             ]
         ][$name];
     }
