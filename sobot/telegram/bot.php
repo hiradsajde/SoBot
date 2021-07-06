@@ -5,7 +5,6 @@ namespace sobot\telegram;
 use GuzzleHttp;
 use sobot\core\arrayManager as array_manager;
 use sobot\core\ipManager as ip_manager;
-
 class bot
 {
     private $token;
@@ -53,7 +52,7 @@ class bot
     public function getUpdate()
     {
         $update = json_decode(file_get_contents("php://input")) ?? $return = true;
-        if ($return) {
+        if($return){
             return false;
         }
         $this->update = $update;
@@ -99,15 +98,17 @@ class bot
         }
         if (isset($update->callback_query)) {
             $this->data = $update->callback_query->data;
-            $this->message_id = $update->callback_query->message->message_id;
-            $this->callback_id = $update->callback_query->id;
             if (isset($update->callback_query->from)) {
-                $this->chat_id = $update->callback_query->from->id;
+                $this->from_id = $update->callback_query->from->id;
                 $this->is_bot = $update->callback_query->from->is_bot;
                 $this->first_name = $update->callback_query->from->first_name;
                 $this->last_name = $this->is_bot = $update->callback_query->from->last_name;
                 $this->username = $update->callback_query->from->username;
                 $this->language_code = $update->callback_query->from->language_code;
+            }
+            if(isset($update->callback_query->message)){
+                $this->message_id = $update->callback_query->message->message_id;
+                $this->chat_id = $update->callback_query->message->chat->id;
             }
         }
         return $this;
@@ -161,7 +162,6 @@ class bot
             'setMyCommands' => 'commands',
             'editMessageCaption' => 'caption',
             'editMessageMedia' => 'media',
-            'answerCallbackQuery' => 'text',
         ][$name];
     }
     public function getClassDefault($name)
@@ -171,14 +171,7 @@ class bot
 
             ],
             'sendMessage' => [
-                'chat_id' => $this->chat_id,
-            ],
-            'editMessageText' => [
-                'chat_id' => $this->chat_id,
-                'message_id' => $this->message_id,
-            ],
-            'answerCallbackQuery' => [
-                'callback_query_id' => $this->callback_id,
+                'chat_id' => $this->from_id,
             ]
         ][$name];
     }
@@ -190,8 +183,7 @@ class bot
     {
         return json_encode(['keyboard' => $keyboard , 'resize_keyboard' => true]);
     }
-    public function isUpdate()
-    {
+    public function isUpdate(){
         $ranges = [
              $this->ip_manager->rangeToIp('149.154.164.0/22'),
              $this->ip_manager->rangeToIp('149.154.160.0/20'),
@@ -199,12 +191,12 @@ class bot
              $this->ip_manager->rangeToIp('91.108.56.0/22'),
         ];
         $user_range = ip2long($_SERVER['REMOTE_ADDR']);
-        foreach ($ranges as $range) {
+        foreach($ranges as $range){
             $status = [
                 'lower' => ip2long($range['lower']),
                 'higher' => ip2long($range['higher']),
             ];
-            if ($status['lower'] < $user_range && $status['higher'] > $user_range) {
+            if($status['lower'] < $user_range && $status['higher'] > $user_range){
                 return true;
             }
         }
