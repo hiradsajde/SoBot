@@ -58,7 +58,7 @@ class bot
         }
         $this->update = $update;
         if (isset($update->message)) {
-            $this->message_id = $update->message->id;
+            $this->message_id = $update->message->message_id;
             $this->text = $update->message->text;
             $this->date = $update->message->date;
             if (isset($update->message->from)) {
