@@ -194,7 +194,7 @@ class bot
                 'callback_query_id' => $this->callback_id,
             ],
             'answerInlineQuery' => [
-                'callback_query_id' => $this->callback_id,
+                'callback_inline_id' => $this->callback_id,
             ]
         ][$name];
     }
