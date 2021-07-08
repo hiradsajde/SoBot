@@ -103,12 +103,25 @@ class bot
             $this->callback_id = $update->callback_query->id;
             if (isset($update->callback_query->from)) {
                 $this->chat_id = $update->callback_query->from->id;
+                $this->from_id = $update->callback_query->from->id;
                 $this->is_bot = $update->callback_query->from->is_bot;
                 $this->first_name = $update->callback_query->from->first_name;
                 $this->last_name = $this->is_bot = $update->callback_query->from->last_name;
                 $this->username = $update->callback_query->from->username;
                 $this->language_code = $update->callback_query->from->language_code;
             }
+        }
+        else if(isset($update->inline_query)){
+            $this->query = $update->inline_query->query;
+            if(isset($update->inline_query->from)){
+                $this->from_id = $update->inline_query->from->id;
+                $this->chat_id = $update->inline_query->from->id;
+                $this->last_name = $update->inline_query->from->last_name;
+                $this->is_bot = $update->inline_query->from->is_bot;
+                $this->language_code = $update->inline_query->from->language_code;
+            }
+            $this->callback_id = $update->inline_query->id;
+            
         }
         return $this;
     }
@@ -158,10 +171,10 @@ class bot
             'setChatStickerSet' => 'chat_id',
             'deleteChatStickerSet' => 'chat_id',
             'answerCallbackQuery' => 'callback_query_id',
+            'answerInlineQuery' => 'inline_query_id',
             'setMyCommands' => 'commands',
             'editMessageCaption' => 'caption',
             'editMessageMedia' => 'media',
-            'answerCallbackQuery' => 'text',
         ][$name];
     }
     public function getClassDefault($name)
@@ -178,6 +191,9 @@ class bot
                 'message_id' => $this->message_id,
             ],
             'answerCallbackQuery' => [
+                'callback_query_id' => $this->callback_id,
+            ],
+            'answerInlineQuery' => [
                 'callback_query_id' => $this->callback_id,
             ]
         ][$name];
@@ -210,4 +226,7 @@ class bot
         }
         return false;
     }
+    public function T_num($text){
+        return str_replace([1,2,3,4,5,6,7,8,9,0] , ['1️⃣' , '2️⃣' , '3️⃣' , '4️⃣' , '5️⃣' , '6️⃣' , '7️⃣' , '8️⃣' , '9️⃣' , '0️⃣'] , $text);
+    } 
 }
