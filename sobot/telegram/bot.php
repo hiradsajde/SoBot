@@ -19,7 +19,8 @@ class bot
     }
     public function __call($name, $arguments)
     {
-        $this->telegram_curl($name, $arguments[0], $arguments[1] ?? []);
+        $res = $this->telegram_curl($name, $arguments[0], $arguments[1] ?? []);
+        return $res;
     }
     public function __set($name, $value)
     {
@@ -101,8 +102,11 @@ class bot
             $this->data = $update->callback_query->data;
             $this->message_id = $update->callback_query->message->message_id;
             $this->callback_id = $update->callback_query->id;
+            if(isset($update->callback_query->message->chat)){
+                $this->type = $update->callback_query->message->chat->type;
+                $this->chat_id = $update->callback_query->message->chat->id;
+            }
             if (isset($update->callback_query->from)) {
-                $this->chat_id = $update->callback_query->from->id;
                 $this->from_id = $update->callback_query->from->id;
                 $this->is_bot = $update->callback_query->from->is_bot;
                 $this->first_name = $update->callback_query->from->first_name;
@@ -131,9 +135,9 @@ class bot
             'setWebhook' => 'url',
             'sendMessage' => 'text',
             'editMessageText' => 'text',
+            'copyMessage' => 'chat_id',
             'sendPhoto' => 'photo',
-            'forwardMessage' => 'from_chat_id',
-            'copyMessage' => 'from_chat_id',
+            'forwardMessage' => 'chat_id',
             'sendAudio' => 'audio',
             'sendDocument' => 'document',
             'sendVideo' => 'video',
@@ -170,11 +174,12 @@ class bot
             'getChatMember' => 'user_id',
             'setChatStickerSet' => 'chat_id',
             'deleteChatStickerSet' => 'chat_id',
-            'answerCallbackQuery' => 'callback_query_id',
+            'answerCallbackQuery' => 'text',
             'answerInlineQuery' => 'inline_query_id',
             'setMyCommands' => 'commands',
             'editMessageCaption' => 'caption',
             'editMessageMedia' => 'media',
+            'sendDocument' => 'document',
         ][$name];
     }
     public function getClassDefault($name)
@@ -194,8 +199,24 @@ class bot
                 'callback_query_id' => $this->callback_id,
             ],
             'answerInlineQuery' => [
-                'callback_inline_id' => $this->callback_id,
-            ]
+                'inline_query_id' => $this->callback_id,
+            ],
+            'deleteMessage' => [
+                'message_id' => $this->message_id,
+                'chat_id' => $this->chat_id,
+            ],
+            'copyMessage' => [
+                'from_chat_id' => $this->chat_id,
+                'message_id' => $this->message_id,
+                
+            ],
+            'forwardMessage' => [
+                'from_chat_id' => $this->chat_id,    
+                'message_id' => $this->message_id,
+            ],
+            'sendDocument' => [
+                'chat_id' => $this->chat_id,
+            ],
         ][$name];
     }
     public function inline_keyboard($keyboard)
@@ -226,7 +247,4 @@ class bot
         }
         return false;
     }
-    public function T_num($text){
-        return str_replace([1,2,3,4,5,6,7,8,9,0] , ['1️⃣' , '2️⃣' , '3️⃣' , '4️⃣' , '5️⃣' , '6️⃣' , '7️⃣' , '8️⃣' , '9️⃣' , '0️⃣'] , $text);
-    } 
 }
