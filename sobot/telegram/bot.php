@@ -36,8 +36,9 @@ class bot
         }
         $this->default[$method] = isset($this->default[$method]) ? $this->array_manager->getSingleArray($this->getClassDefault($method), $this->default[$method]) : $this->getClassDefault($method);
         $res = isset($this->default[$method]) ? $this->array_manager->getSingleArray($this->default[$method], $query) : $query;
-        if ($this->request("https://api.telegram.org/bot{$this->token}/$method", $res)) {
-            return $this;
+        $req = $this->request("https://api.telegram.org/bot{$this->token}/$method", $res);
+        if ($req->result) {
+            return $req->data;
         }
     }
     public function request($url, array $query)
@@ -47,7 +48,10 @@ class bot
             'query' => $query,
         ]);
         if ($res->getStatusCode() == 200) {
-            return true;
+            return (object)[
+                'result' => true,
+                'data' => json_decode($res->getBody()->getContents()),
+            ];
         }
         return $this->getStatusCode();
     }
@@ -180,6 +184,8 @@ class bot
             'editMessageCaption' => 'caption',
             'editMessageMedia' => 'media',
             'sendDocument' => 'document',
+            'getFile' => 'file_id',
+            'File' => 'file_id',
         ][$name];
     }
     public function getClassDefault($name)
