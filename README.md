@@ -1,7 +1,7 @@
 <h1>sobot is very simple library for create telegram bots</h1>
 
 This library have very short document. read telegram methods for <a href="https://core.telegram.org/methods">bot api</a> first
-<h2>installtion</h2>
+<h2>Installtion</h2>
 
 ```
 composer require hiradsajde/sobot
@@ -14,7 +14,7 @@ composer install # if need use composer
 
 clone method usage need autoload file for include sobot\telegram\bot
 
-<h2>hello world project</h2>
+<h2>Hello World Project</h2>
 
 ```
 <?php
@@ -27,7 +27,7 @@ if($bot->isUpdate()){
 }
 ```
 
-<h2>library syntax</h2>
+<h2>Library Syntax</h2>
 
 ```
   $bot->method(main_argument , [
@@ -52,7 +52,7 @@ for example we can use all of there for sendMessage
   ]);
 ```
 
-<h2>what main argument?</h2>
+<h2>What Main Argument?</h2>
 
 you can optionally use main argument in first parameter. for example sendMessage main argument is text.
 
@@ -66,7 +66,7 @@ you can optionally use main argument in first parameter. for example sendMessage
   ]);
 ```
 you can see more methods main argument in next title
-<h2>main arguments list</h2>
+<h2>Main Arguments list</h2>
 
 | Method     | Argument |
 | ---      | ---       |
@@ -106,7 +106,7 @@ and we recive blablabla with out errors :)
 but why we aren't said default chat_id is $bot->chat_id, and message was sent? we have lot of default parameters
 sobot merge <a href="https://github.com/hiradsajde/sobot/blob/d32fa964d222eb021efd005688ff1b293bf0b05e/sobot/telegram/bot.php#L136">getDefault method</a> to your default property and gave you truest code with very less coding
 
-<h2>sobot default property</h2>
+<h2>Sobot Default Property</h2>
 see one example of usage properties
 
 ```
@@ -114,7 +114,7 @@ see one example of usage properties
 ```
 you can see sobot properties for manage telegram json request <a href="https://github.com/hiradsajde/sobot/blob/d32fa964d222eb021efd005688ff1b293bf0b05e/sobot/telegram/bot.php#L58">here</a>
 
-<h2>manage keyboards</h2>
+<h2>Manage Keyboards</h2>
 
 if you need to manage your keyboards with sobot... we have 2 methods for this. 
 
@@ -133,4 +133,4 @@ if you need to manage your keyboards with sobot... we have 2 methods for this.
 open source  project for learn sobot : 
 <ol>
   <li><a href="https://github.com/hiradsajde/wp-telegram"> wordpress post reader bot for telegram </a></li>
-</ol>
+</ol> 
