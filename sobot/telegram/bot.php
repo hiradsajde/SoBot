@@ -37,23 +37,26 @@ class bot
         $this->default[$method] = isset($this->default[$method]) ? $this->array_manager->getSingleArray($this->getClassDefault($method), $this->default[$method]) : $this->getClassDefault($method);
         $res = isset($this->default[$method]) ? $this->array_manager->getSingleArray($this->default[$method], $query) : $query;
         $req = $this->request("https://api.telegram.org/bot{$this->token}/$method", $res);
-        if ($req->result) {
-            return $req->data;
-        }
+        return $req;
     }
     public function request($url, array $query)
     {
         $client = new GuzzleHttp\Client();
         $res = $client->request('GET', $url, [
             'query' => $query,
+            'http_errors' => false
         ]);
         if ($res->getStatusCode() == 200) {
             return (object)[
                 'result' => true,
                 'data' => json_decode($res->getBody()->getContents()),
             ];
+        } else {
+            return (object)[
+                'result' => false,
+                'data' => json_decode($res->getBody()->getContents()),
+            ];
         }
-        return $this->getStatusCode();
     }
     public function getUpdate()
     {
